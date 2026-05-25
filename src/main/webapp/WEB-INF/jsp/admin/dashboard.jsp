@@ -2,36 +2,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
-<html lang="zh-CN">
-<head><meta charset="UTF-8"><title>管理员后台</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/app.css"></head>
-<body>
-<div class="sidebar-layout">
-    <aside class="sidebar"><a class="brand" href="${pageContext.request.contextPath}/admin/dashboard">网上书城后台</a><nav class="side-nav"><a class="active" href="${pageContext.request.contextPath}/admin/dashboard">后台首页</a><a href="${pageContext.request.contextPath}/admin/books">图书管理</a><a href="${pageContext.request.contextPath}/admin/orders">订单管理</a><a href="${pageContext.request.contextPath}/admin/users">用户管理</a><a href="${pageContext.request.contextPath}/logout">退出登录</a></nav></aside>
-    <main class="admin-main">
-        <div class="page-title"><div><h1>后台首页</h1><p class="subtitle">管理员：${sessionScope.loginUser.realName}</p></div></div>
-        <section class="grid stats">
-            <div class="card stat">书籍总数<strong>${stats.bookCount}</strong></div>
-            <div class="card stat">订单总数<strong>${stats.orderCount}</strong></div>
-            <div class="card stat">用户总数<strong>${stats.userCount}</strong></div>
-            <div class="card stat">今日订单<strong>${stats.todayOrderCount}</strong></div>
+<html class="light" lang="zh-CN">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>图书馆管理后台</title><%@ include file="../common/tailwind.jspf" %></head>
+<body class="bg-background text-on-surface">
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col justify-between py-8 px-4 bg-surface-container-low border-r border-outline-variant z-50">
+    <div><div class="px-3 mb-10"><h1 class="font-headline-md text-headline-md font-bold text-primary">图书馆管理后台</h1><p class="font-label-md text-label-md text-on-surface-variant">系统管理员</p></div><nav class="space-y-1"><a class="bg-secondary-container text-white rounded-lg font-bold flex items-center gap-3 p-3" href="${pageContext.request.contextPath}/admin/dashboard"><span class="material-symbols-outlined">dashboard</span><span class="font-label-md text-label-md">仪表盘</span></a><a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 p-3" href="${pageContext.request.contextPath}/admin/books"><span class="material-symbols-outlined">menu_book</span><span>书籍管理</span></a><a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 p-3" href="${pageContext.request.contextPath}/admin/orders"><span class="material-symbols-outlined">receipt_long</span><span>订单管理</span></a><a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 p-3" href="${pageContext.request.contextPath}/admin/users"><span class="material-symbols-outlined">group</span><span>用户管理</span></a></nav></div>
+    <a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 p-3" href="${pageContext.request.contextPath}/logout"><span class="material-symbols-outlined">logout</span><span>退出登录</span></a>
+</aside>
+<main class="ml-64 min-h-screen">
+    <header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-md px-margin-desktop py-6 flex justify-between items-center border-b border-outline-variant"><div><h2 class="font-headline-md text-headline-md font-bold text-primary">概览</h2><p class="font-body-md text-body-md text-on-surface-variant">系统状态与近期活动。</p></div><div class="h-10 w-10 rounded-full bg-primary text-on-primary flex items-center justify-center"><span class="material-symbols-outlined">person</span></div></header>
+    <div class="p-margin-desktop space-y-gutter-desktop max-w-container-max mx-auto">
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-hover"><p class="font-label-md text-label-md text-on-surface-variant">书籍总数</p><h3 class="font-headline-lg text-headline-lg font-bold text-primary mt-1">${stats.bookCount}</h3></div>
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-hover"><p class="font-label-md text-label-md text-on-surface-variant">订单总数</p><h3 class="font-headline-lg text-headline-lg font-bold text-primary mt-1">${stats.orderCount}</h3></div>
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-hover"><p class="font-label-md text-label-md text-on-surface-variant">用户总数</p><h3 class="font-headline-lg text-headline-lg font-bold text-primary mt-1">${stats.userCount}</h3></div>
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-hover"><p class="font-label-md text-label-md text-on-surface-variant">今日订单</p><h3 class="font-headline-lg text-headline-lg font-bold text-primary mt-1">${stats.todayOrderCount}</h3></div>
         </section>
-        <div class="grid" style="grid-template-columns:2fr 1fr;margin-top:22px">
-            <section class="card table-wrap">
-                <table>
-                    <thead><tr><th>最近订单</th><th>用户</th><th>金额</th><th>状态</th></tr></thead>
-                    <tbody>
-                    <c:forEach items="${recentOrders}" var="order"><tr><td>${order.orderNo}</td><td>${order.user.username}</td><td>￥<fmt:formatNumber value="${order.totalAmount}" pattern="0.00"/></td><td><span class="badge">${order.status}</span></td></tr></c:forEach>
-                    </tbody>
-                </table>
-            </section>
-            <section class="card summary">
-                <h2>库存预警</h2>
-                <c:forEach items="${lowStockBooks}" var="book">
-                    <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px"><span>${book.title}</span><strong>${book.stock}</strong></div>
-                </c:forEach>
-            </section>
-        </div>
-    </main>
-</div>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-desktop">
+            <div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden"><div class="p-6 border-b border-outline-variant flex justify-between"><h4 class="font-headline-md text-headline-md font-bold text-primary">最近订单</h4><a class="text-secondary font-label-md text-label-md" href="${pageContext.request.contextPath}/admin/orders">查看全部订单</a></div><table class="w-full text-left"><thead class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase"><tr><th class="px-6 py-4">订单编号</th><th class="px-6 py-4">客户</th><th class="px-6 py-4">状态</th><th class="px-6 py-4 text-right">总额</th></tr></thead><tbody class="divide-y divide-outline-variant"><c:forEach items="${recentOrders}" var="order"><tr class="hover:bg-surface-container-low"><td class="px-6 py-4 text-primary">${order.orderNo}</td><td class="px-6 py-4">${order.user.username}</td><td class="px-6 py-4"><span class="px-2 py-1 bg-secondary-fixed text-on-secondary-fixed-variant rounded text-[11px] font-bold">${order.status}</span></td><td class="px-6 py-4 text-right font-semibold">￥<fmt:formatNumber value="${order.totalAmount}" pattern="0.00"/></td></tr></c:forEach></tbody></table></div>
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden"><div class="p-6 border-b border-outline-variant flex justify-between"><h4 class="font-headline-md text-headline-md font-bold text-primary">低库存预警</h4><span class="bg-error text-white px-2 py-1 rounded text-[10px] font-bold">${lowStockBooks.size()} 项</span></div><div class="p-4 space-y-4"><c:forEach items="${lowStockBooks}" var="book"><div class="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-container-low"><div class="h-16 w-12 bg-surface-container-high rounded overflow-hidden"><img class="w-full h-full object-cover" src="${pageContext.request.contextPath}/${book.coverUrl}" alt="${book.title}"/></div><div class="flex-grow"><h5 class="font-label-md text-label-md text-primary leading-tight">${book.title}</h5><span class="text-error font-bold font-label-sm text-label-sm">剩余 ${book.stock} 件</span></div></div></c:forEach></div></div>
+        </section>
+    </div>
+</main>
 </body>
 </html>
