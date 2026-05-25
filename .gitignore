@@ -1,0 +1,9 @@
+target/
+*.class
+*.war
+.idea/
+.classpath
+.project
+.settings/
+*.iml
+_stitch_preview/

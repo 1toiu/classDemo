@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gzu.classdemo.dao.CartMapper">
+    <resultMap id="CartItemMap" type="CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="quantity" column="quantity"/>
+        <association property="book" javaType="Book">
+            <id property="id" column="b_id"/>
+            <result property="title" column="title"/>
+            <result property="author" column="author"/>
+            <result property="category" column="category"/>
+            <result property="price" column="price"/>
+            <result property="stock" column="stock"/>
+            <result property="description" column="description"/>
+            <result property="coverUrl" column="cover_url"/>
+        </association>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="CartItemMap">
+        SELECT c.*, b.id AS b_id, b.title, b.author, b.category, b.price, b.stock, b.description, b.cover_url
+        FROM cart c
+        JOIN book b ON c.book_id = b.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.id DESC
+    </select>
+
+    <select id="findOne" resultType="CartItem">
+        SELECT * FROM cart WHERE user_id = #{userId} AND book_id = #{bookId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cart(user_id, book_id, quantity) VALUES(#{userId}, #{bookId}, #{quantity})
+    </insert>
+
+    <update id="increase">
+        UPDATE cart SET quantity = quantity + #{quantity} WHERE id = #{id}
+    </update>
+
+    <update id="updateQuantity">
+        UPDATE cart SET quantity = #{quantity} WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM cart WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+    <delete id="clearByUserId">
+        DELETE FROM cart WHERE user_id = #{userId}
+    </delete>
+</mapper>

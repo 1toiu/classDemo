@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.gzu.classdemo.dao.OrderMapper">
+    <resultMap id="OrderMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <association property="user" javaType="User">
+            <id property="id" column="u_id"/>
+            <result property="username" column="username"/>
+            <result property="realName" column="real_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders(order_no, user_id, total_amount, status)
+        VALUES(#{orderNo}, #{userId}, #{totalAmount}, #{status})
+    </insert>
+
+    <insert id="insertItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_item(order_id, book_id, book_title, price, quantity)
+        VALUES(#{orderId}, #{bookId}, #{bookTitle}, #{price}, #{quantity})
+    </insert>
+
+    <select id="findByUserId" resultMap="OrderMap">
+        SELECT o.*, u.id AS u_id, u.username, u.real_name
+        FROM orders o JOIN user u ON o.user_id = u.id
+        WHERE o.user_id = #{userId}
+        ORDER BY o.create_time DESC
+    </select>
+
+    <select id="findAll" resultMap="OrderMap">
+        SELECT o.*, u.id AS u_id, u.username, u.real_name
+        FROM orders o JOIN user u ON o.user_id = u.id
+        <where>
+            <if test="status != null and status != ''">
+                AND o.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (o.order_no LIKE CONCAT('%', #{keyword}, '%') OR u.username LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY o.create_time DESC
+    </select>
+
+    <select id="findItems" resultType="OrderItem">
+        SELECT * FROM order_item WHERE order_id = #{orderId}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE orders SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM orders
+    </select>
+
+    <select id="countToday" resultType="int">
+        SELECT COUNT(*) FROM orders WHERE DATE(create_time) = CURDATE()
+    </select>
+
+    <select id="findRecent" resultMap="OrderMap">
+        SELECT o.*, u.id AS u_id, u.username, u.real_name
+        FROM orders o JOIN user u ON o.user_id = u.id
+        ORDER BY o.create_time DESC LIMIT #{limit}
+    </select>
+</mapper>
