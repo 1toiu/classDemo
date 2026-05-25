@@ -16,9 +16,6 @@ public class UserServiceImpl implements UserService {
             if (user == null || !user.getPassword().equals(password)) {
                 return null;
             }
-            if (role != null && !role.trim().isEmpty() && !user.getRole().equalsIgnoreCase(role)) {
-                return null;
-            }
             if (!"ENABLED".equalsIgnoreCase(user.getStatus())) {
                 return null;
             }
