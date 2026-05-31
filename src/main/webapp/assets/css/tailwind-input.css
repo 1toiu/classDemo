@@ -22,10 +22,15 @@
     align-items: center;
     justify-content: center;
     min-width: 1em;
-    font-family: "Microsoft YaHei", Arial, sans-serif;
     font-size: 1.25rem;
     line-height: 1;
     vertical-align: middle;
+  }
+
+  .material-symbols-outlined svg {
+    width: 1em;
+    height: 1em;
+    display: block;
   }
 
   .card-hover:hover {
