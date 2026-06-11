@@ -37,6 +37,33 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
     transform: translateY(-2px);
   }
+
+  .ai-message {
+    max-width: 88%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .ai-message-assistant {
+    background: #ffffff;
+    border: 1px solid #c5c6cc;
+    color: #191c1e;
+  }
+
+  .ai-message-user {
+    margin-left: auto;
+    background: #0a1422;
+    color: #ffffff;
+  }
+
+  .ai-message-error {
+    background: #ffdad6;
+    color: #93000a;
+  }
 }
 
 @layer utilities {

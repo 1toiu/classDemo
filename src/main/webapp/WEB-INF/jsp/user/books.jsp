@@ -83,5 +83,6 @@
     <div><span class="font-headline-md text-headline-md font-bold text-primary">现代图书馆</span><p class="font-label-sm text-label-sm text-on-surface-variant mt-1">© 2026 现代图书馆。保留所有权利。</p></div>
     <div class="flex gap-8 mt-4 md:mt-0"><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary" href="#">隐私政策</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary" href="#">联系我们</a></div>
 </footer>
+<%@ include file="../common/ai-chat.jspf" %>
 </body>
 </html>

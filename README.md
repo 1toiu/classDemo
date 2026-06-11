@@ -127,6 +127,24 @@ http://localhost:8080/classDemo
 
 登录后系统会根据数据库中的用户角色自动跳转到对应页面。
 
+## DeepSeek AI 客服
+
+用户端书籍、购物车和订单页面提供右下角 AI 客服，可根据当前数据库书目回答图书推荐、价格、库存和购物流程问题。
+
+API Key 不写入源码。启动 Tomcat 前设置以下环境变量：
+
+```text
+DEEPSEEK_API_KEY=你的 DeepSeek API Key
+```
+
+可选模型配置：
+
+```text
+DEEPSEEK_MODEL=deepseek-chat
+```
+
+在 Eclipse 中可以打开 Tomcat 的启动配置，在 `Environment` 中添加上述变量；也可以通过 Tomcat 的 `bin/setenv.bat` 设置。修改后需要彻底重启 Tomcat。
+
 ## 课程设计对应内容
 
 本项目对应实验报告中的“网上书城系统”，覆盖 Maven 项目管理、Tomcat 部署、MVC 分层开发、MyBatis 数据库访问、Druid 连接池、权限过滤、前后端页面交互和 CRUD 功能实现等要求。

@@ -33,5 +33,6 @@
         </div>
     </div>
 </main>
+<%@ include file="../common/ai-chat.jspf" %>
 </body>
 </html>
